@@ -14,9 +14,8 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["business", "productivity"],
     lang: "en",
     icons: [
-      { src: "/file.svg", sizes: "192x192", type: "image/svg+xml", purpose: "any" },
-      { src: "/globe.svg", sizes: "512x512", type: "image/svg+xml", purpose: "maskable" },
-      { src: "/file.svg", sizes: "192x192", type: "image/svg+xml", purpose: "maskable" },
+      { src: "/sage-mark.svg", sizes: "192x192", type: "image/svg+xml", purpose: "any" },
+      { src: "/sage-mark.svg", sizes: "512x512", type: "image/svg+xml", purpose: "maskable" },
     ],
   };
 }

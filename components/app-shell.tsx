@@ -10,6 +10,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { SageMark } from "@/components/logo";
 import { usePlant } from "@/lib/plant-store";
 import { useAuth } from "@/lib/auth-store";
 import { useRouter } from "next/navigation";
@@ -78,10 +79,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Sidebar — hidden on auth pages */}
       {isAuthPage ? null : <aside className="hidden w-56 shrink-0 flex-col border-r border-line bg-bg-elevated md:flex">
         <div className="border-b border-line px-5 py-4">
-          <Link href="/" className="block">
-            <div className="label-caps text-lg leading-none text-ink">{APP_NAME}</div>
-            <div className="mt-1 text-[11px] leading-tight text-ink-muted">{APP_TAGLINE}</div>
+          <Link href="/" className="flex items-center gap-2.5">
+            <SageMark className="h-7 w-7 shrink-0 text-ink" accent />
+            <div>
+              <div className="font-display text-sm font-bold uppercase tracking-tight leading-none text-ink">SAGE</div>
+              <div className="mt-0.5 text-[10px] leading-none text-ink-muted">Sustainability Action</div>
+            </div>
           </Link>
+          <div className="label-caps mt-2 text-[10px] leading-tight text-ink-muted">{APP_TAGLINE}</div>
         </div>
         <nav className="flex-1 py-4">
           <ul className="space-y-0.5 px-2">
@@ -137,7 +142,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </button>
             )}
             {/* Mobile brand */}
-            <span className="label-caps text-base md:hidden">{APP_NAME}</span>
+            <Link href="/" className="flex items-center gap-1.5 md:hidden" aria-label="SAGE home">
+              <SageMark className="h-5 w-5 text-ink" accent />
+              <span className="font-display text-xs font-bold uppercase tracking-tight">{APP_NAME}</span>
+            </Link>
             <span className="label-caps hidden text-xs text-ink-muted md:inline">
               Sustainability Action &amp; Grade Engine
             </span>
@@ -168,7 +176,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <button aria-label="Close navigation" onClick={() => setDrawerOpen(false)} className="absolute inset-0 bg-ink/30" />
           <div className="absolute left-0 top-0 flex h-full w-72 max-w-[85vw] flex-col border-r border-line bg-bg-elevated">
             <div className="flex h-14 items-center justify-between border-b border-line px-5">
-              <span className="label-caps text-sm">{APP_NAME}</span>
+              <span className="flex items-center gap-2"><SageMark className="h-5 w-5 text-ink" /><span className="font-display text-xs font-bold uppercase tracking-tight">{APP_NAME}</span></span>
               <button type="button" onClick={() => setDrawerOpen(false)} aria-label="Close" className="inline-flex h-11 w-11 items-center justify-center border border-line bg-surface"><svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.2" /></svg></button>
             </div>
             <nav className="flex-1 overflow-y-auto py-4">

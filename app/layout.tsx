@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "SAGE", statusBarStyle: "default" },
   formatDetection: { telephone: false },
   manifest: "/manifest.webmanifest",
-  icons: { icon: "/file.svg", apple: "/file.svg" },
+  icons: { icon: [{ url: "/sage-mark.svg", type: "image/svg+xml" }], apple: [{ url: "/sage-mark.svg", type: "image/svg+xml" }], shortcut: "/sage-mark.svg" },
 };
 
 export default function RootLayout({
