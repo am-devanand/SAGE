@@ -150,7 +150,7 @@ export default function RegisterPage() {
               value={form.name}
               onChange={(e) => set("name", e.target.value)}
               placeholder="e.g. My Factory Pvt Ltd"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -162,7 +162,7 @@ export default function RegisterPage() {
               id="sector"
               value={form.sector}
               onChange={(e) => set("sector", e.target.value as Sector)}
-              className="mt-1 w-full border border-line bg-surface px-1 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-2 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             >
               {SECTORS.map((s) => (
                 <option key={s} value={s}>
@@ -180,7 +180,7 @@ export default function RegisterPage() {
               id="size"
               value={form.size_category}
               onChange={(e) => set("size_category", e.target.value as SizeCategory)}
-              className="mt-1 w-full border border-line bg-surface px-1 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-2 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             >
               {SIZES.map((s) => (
                 <option key={s} value={s}>
@@ -206,7 +206,7 @@ export default function RegisterPage() {
               value={form.grid_kwh}
               onChange={(e) => set("grid_kwh", e.target.value)}
               placeholder="e.g. 1000000"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -221,7 +221,7 @@ export default function RegisterPage() {
               value={form.diesel_l}
               onChange={(e) => set("diesel_l", e.target.value)}
               placeholder="e.g. 20000"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -237,7 +237,7 @@ export default function RegisterPage() {
               value={form.renewable_pct}
               onChange={(e) => set("renewable_pct", e.target.value)}
               placeholder="0–100"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -254,7 +254,7 @@ export default function RegisterPage() {
               id="materialType"
               value={form.materialType}
               onChange={(e) => set("materialType", e.target.value as MaterialType)}
-              className="mt-1 w-full border border-line bg-surface px-1 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-2 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             >
               {MATERIALS.map((m) => (
                 <option key={m} value={m}>
@@ -275,7 +275,7 @@ export default function RegisterPage() {
               value={form.tonnes}
               onChange={(e) => set("tonnes", e.target.value)}
               placeholder="e.g. 500"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -290,7 +290,7 @@ export default function RegisterPage() {
               value={form.waste_tonnes}
               onChange={(e) => set("waste_tonnes", e.target.value)}
               placeholder="e.g. 100"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -305,7 +305,7 @@ export default function RegisterPage() {
               value={form.transport_km}
               onChange={(e) => set("transport_km", e.target.value)}
               placeholder="e.g. 120000"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -320,7 +320,7 @@ export default function RegisterPage() {
               value={form.production_units}
               onChange={(e) => set("production_units", e.target.value)}
               placeholder="e.g. 200000"
-              className="mt-1 w-full border border-line bg-surface px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent"
+              className="mt-1 w-full border border-line bg-surface px-3 py-2 font-mono text-sm text-ink outline-none focus:border-accent"
             />
           </div>
 
@@ -333,7 +333,7 @@ export default function RegisterPage() {
             )}
             <button
               type="submit"
-              className="btn-press ml-auto border border-accent bg-accent px-5 py-2.5 text-accent-ink transition-colors hover:bg-accent/90"
+              className="btn-press ml-auto border border-accent bg-accent px-5 py-3 text-accent-ink transition-colors hover:bg-accent/90"
             >
               <span className="label-caps uppercase">Register &amp; Score</span>
             </button>

@@ -178,11 +178,11 @@ export default function PlanPage() {
   }, [portfolio, input, stamp, docNo]);
 
   return (
-    <div className="relative mx-auto flex max-w-[1024px] flex-col gap-8 px-8 py-10">
+    <div className="relative mx-auto flex max-w-[1280px] flex-col gap-8 px-4 py-6 md:px-8 md:py-10">
       {/* ============================================================ *
        * REPORT MASTHEAD                                               *
        * ============================================================ */}
-      <section className="border border-line bg-surface p-8">
+      <section className="border border-line bg-surface p-6 md:p-8">
         {/* Eyebrow row */}
         <div className="flex items-center justify-between">
           <span className="label-caps text-[10px] text-ink-muted">
@@ -260,7 +260,7 @@ export default function PlanPage() {
         </div>
 
         {/* Table header */}
-        <div className="grid grid-cols-12 gap-4 border-b border-line px-6 py-2.5">
+        <div className="grid grid-cols-12 gap-4 border-b border-line px-6 py-3">
           <span className="label-caps col-span-1 text-[10px] text-ink-muted">SEQ</span>
           <span className="label-caps col-span-5 text-[10px] text-ink-muted">
             Intervention Protocol
@@ -277,7 +277,7 @@ export default function PlanPage() {
         {actions.map((action, i) => (
           <div
             key={action.action_id}
-            className="grid grid-cols-12 items-center gap-4 border-b border-line px-6 py-3.5 last:border-b-0"
+            className="grid grid-cols-12 items-center gap-4 border-b border-line px-6 py-3 last:border-b-0"
           >
             <span className="col-span-1 font-mono text-sm text-ink-muted">
               {String(i + 1).padStart(2, "0")}

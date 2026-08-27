@@ -63,14 +63,14 @@ export default function LoginPage() {
           <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
             <div>
               <label className="label-caps text-[10px] text-ink-muted" htmlFor="email">Email</label>
-              <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.in" className="mt-1 w-full border border-line bg-bg-elevated px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent" />
+              <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.in" className="mt-1 w-full border border-line bg-bg-elevated px-2 py-2 font-mono text-sm text-ink outline-none focus:border-accent" />
             </div>
             <div>
               <label className="label-caps text-[10px] text-ink-muted" htmlFor="password">Password</label>
-              <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="mt-1 w-full border border-line bg-bg-elevated px-2 py-1.5 font-mono text-sm text-ink outline-none focus:border-accent" />
+              <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" className="mt-1 w-full border border-line bg-bg-elevated px-2 py-2 font-mono text-sm text-ink outline-none focus:border-accent" />
             </div>
             {err && <span className="font-mono text-xs text-accent" role="alert">{err}</span>}
-            <button type="submit" className="btn-press border border-accent bg-accent px-4 py-2.5 text-accent-ink hover:bg-accent/90"><span className="label-caps uppercase">Login &amp; Continue</span></button>
+            <button type="submit" className="btn-press border border-accent bg-accent px-4 py-3 text-accent-ink hover:bg-accent/90"><span className="label-caps uppercase">Login &amp; Continue</span></button>
           </form>
 
           <div className="mt-4 flex items-center justify-between border-t border-line pt-4">

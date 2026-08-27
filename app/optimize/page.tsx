@@ -141,7 +141,7 @@ export default function OptimizePage() {
                     type="button"
                     onClick={() => setMode(m.value)}
                     aria-pressed={selected}
-                    className={`flex items-center justify-between border px-3 py-2.5 text-left transition-colors ${
+                    className={`flex items-center justify-between border px-3 py-3 text-left transition-colors ${
                       selected
                         ? "border-accent text-ink outline outline-2 outline-offset-[-2px] outline-accent"
                         : "border-line text-ink-muted hover:border-line hover:text-ink"
