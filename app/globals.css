@@ -1,26 +1,140 @@
 @import "tailwindcss";
 
+/* ================================================================== *
+ * SAGE theme tokens — light default + derived dark (graphite base).  *
+ * Switched via next-themes' class strategy (.dark on <html>).        *
+ * Design language: sharp corners (0px), 1px borders, tonal layering, *
+ * blueprint grid texture, no shadows, no blur, no glassmorphism.      *
+ * ================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #faf9f7;
+  --bg-elevated: #f4f3f1;
+  --surface-card: #ffffff;
+  --ink: #1a1c1b;
+  --ink-muted: #45474b;
+  --line: #c5c6cc;
+  --accent: #ff7a1b;
+  --accent-ink: #5e2700;
+  --slate: #5b6b7a;
 }
 
+.dark {
+  --bg: #14181b;
+  --bg-elevated: #1b2023;
+  --surface-card: #1f2427;
+  --ink: #e7e5e2;
+  --ink-muted: #a8acae;
+  --line: #333a3d;
+  --accent: #ff8a3d;
+  --accent-ink: #2b1300;
+  --slate: #8b96a0;
+}
+
+/* Map tokens into Tailwind's color utilities (bg-surface, text-ink, border-line, …).
+   @theme inline keeps the utilities live-refreshing from the CSS vars so
+   light: and dark: variants just work with plain utilities. */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-surface: var(--surface-card);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-slate: var(--slate);
+
+  --font-display: var(--font-plex-sans);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ------------------------------------------------------------------ *
+ * Base                                                                *
+ * ------------------------------------------------------------------ */
+
+html {
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  /* Sharp corners everywhere — the blueprint narrative forbids rounding. */
+  border-radius: 0;
+}
+
+/* All numbers/metrics render in the mono data font — enforced by the
+   `font-mono` utility being used on every numeric element; this class
+   is the fallback for anything that slips through. */
+.mono-data {
+  font-family: var(--font-plex-mono), ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Section labels: uppercase IBM Plex Sans semibold with letterspacing. */
+.label-caps {
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+/* Blueprint grid texture — 24px squares at ~4% opacity using --line.
+   Layered behind hero and data-workspace areas. */
+.blueprint-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--line) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--line) 4%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Solid-grid variant for darker surfaces (slightly stronger). */
+.blueprint-grid-strong {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--line) 7%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--line) 7%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Mechanical button depress: 1px down-right on click (no shadows). */
+.btn-press:active {
+  transform: translate(1px, 1px);
+}
+
+/* Range slider — sharp thumb, amber active track. */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  background: var(--line);
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border: 1px solid var(--ink);
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--accent);
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+/* Selection uses the accent for an industrial feel. */
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
 }
