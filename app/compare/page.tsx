@@ -20,14 +20,24 @@ export default function ComparePage() {
       <p className="label-caps mt-1 text-[10px] text-ink-muted">Side-by-side up to 3</p>
 
       <div className="mt-4 grid grid-cols-12 gap-4">
-        {[ [a,setA], [b,setB], [c,setC] ].map(([val,setter], idx) => (
-          <div key={idx} className="col-span-12 border border-line bg-surface p-3 md:col-span-4">
-            <label className="label-caps text-[10px] text-ink-muted">Plant {idx+1}</label>
-            <select value={val as number} onChange={(e)=> (setter as any)(Number(e.target.value))} className="mt-1 w-full border border-line bg-bg-elevated px-2 py-2 font-mono text-sm">
-              {plants.map((p,i)=><option key={p.name} value={i}>{p.name}</option>)}
-            </select>
-          </div>
-        ))}
+        <div className="col-span-12 border border-line bg-surface p-3 md:col-span-4">
+          <label className="label-caps text-[10px] text-ink-muted">Plant 1</label>
+          <select value={a} onChange={(e)=> setA(Number(e.target.value))} className="mt-1 w-full border border-line bg-bg-elevated px-2 py-2 font-mono text-sm">
+            {plants.map((p,i)=><option key={p.name} value={i}>{p.name}</option>)}
+          </select>
+        </div>
+        <div className="col-span-12 border border-line bg-surface p-3 md:col-span-4">
+          <label className="label-caps text-[10px] text-ink-muted">Plant 2</label>
+          <select value={b} onChange={(e)=> setB(Number(e.target.value))} className="mt-1 w-full border border-line bg-bg-elevated px-2 py-2 font-mono text-sm">
+            {plants.map((p,i)=><option key={p.name} value={i}>{p.name}</option>)}
+          </select>
+        </div>
+        <div className="col-span-12 border border-line bg-surface p-3 md:col-span-4">
+          <label className="label-caps text-[10px] text-ink-muted">Plant 3</label>
+          <select value={c} onChange={(e)=> setC(Number(e.target.value))} className="mt-1 w-full border border-line bg-bg-elevated px-2 py-2 font-mono text-sm">
+            {plants.map((p,i)=><option key={p.name} value={i}>{p.name}</option>)}
+          </select>
+        </div>
       </div>
 
       <div className="mt-6 grid grid-cols-12 gap-4">

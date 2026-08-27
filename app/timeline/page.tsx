@@ -6,6 +6,7 @@ import { findBestPortfolio } from "@/lib/optimizer";
 import { applyAction, computeFootprint, computeGrade, formatNumber } from "@/lib/calc-engine";
 import { gradeThresholds } from "@/lib/optimizer";
 import { getAction } from "@/lib/action-catalog";
+import type { ActionParams } from "@/lib/types";
 
 export default function TimelinePage() {
   const { input } = usePlant();
@@ -21,7 +22,7 @@ export default function TimelinePage() {
       for (let i = 0; i < count; i++) {
         const a = actions[i];
         const def = getAction(a.action_id);
-        cur = applyAction(cur, a.action_id, { [def.target_field]: def.default_target } as any);
+        cur = applyAction(cur, a.action_id, { [def.target_field]: def.default_target } as ActionParams);
       }
       const fp = computeFootprint(cur);
       const grade = computeGrade(fp.per_unit_tCO2e, thr);
