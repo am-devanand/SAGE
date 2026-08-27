@@ -13,7 +13,8 @@ import { usePlant } from "@/lib/plant-store";
 import { ProvenanceBadge } from "@/components/provenance-badge";
 import { findBestPortfolio } from "@/lib/optimizer";
 import { getAction } from "@/lib/action-catalog";
-import { formatINR, formatNumber } from "@/lib/calc-engine";
+import { BREAKDOWN_LABELS, formatINR, formatNumber } from "@/lib/calc-engine";
+import type { BreakdownKey } from "@/lib/types";
 import { jsPDF } from "jspdf";
 import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
 
@@ -87,6 +88,7 @@ export default function PlanPage() {
   const capped = portfolio?.capped_reduction_tCO2e ?? 0;
   const pct =
     footprint.total_tCO2e > 0 ? (capped / footprint.total_tCO2e) * 100 : 0;
+  const BREAKDOWN_ORDER: BreakdownKey[] = ["grid", "diesel", "materials", "waste", "transport"];
 
   /* ------------------------------------------------------------------ *
    * PDF export — single-page A4, text-only, never crashes.              *
@@ -158,6 +160,27 @@ export default function PlanPage() {
         M,
         y,
       );
+      y += 8;
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(9);
+      doc.text("BREAKDOWN CHART", M, y);
+      y += 4;
+      const maxV = Math.max(...BREAKDOWN_ORDER.map((k) => footprint.breakdown[k as BreakdownKey].value));
+      BREAKDOWN_ORDER.forEach((k, i) => {
+        const v = footprint.breakdown[k as BreakdownKey].value;
+        const w = maxV > 0 ? (v / maxV) * 36 : 0;
+        doc.setFillColor(255, 122, 27);
+        doc.rect(M + i * 32, y, w, 5, "F");
+        doc.setFontSize(6);
+        doc.setTextColor(0);
+        doc.text(k.slice(0, 4), M + i * 32, y + 9);
+      });
+      y += 16;
+      doc.rect(W - M - 28, y - 18, 28, 28);
+      doc.setFontSize(5);
+      doc.setTextColor(0);
+      doc.text(docNo, W - M - 14, y - 4, { align: "center" });
+      doc.text("verify: sageport.netlify.app", W - M - 14, y + 2, { align: "center" });
 
       // Footer
       doc.setFont("helvetica", "normal");
@@ -318,6 +341,37 @@ export default function PlanPage() {
               Total Investment {formatINR(portfolio?.total_investment ?? 0)}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Chart + QR */}
+      <section className="grid grid-cols-12 gap-4">
+        <div className="col-span-12 border border-line bg-surface p-4 md:col-span-8">
+          <div className="label-caps text-[10px] text-ink-muted">Breakdown Chart</div>
+          <div className="mt-3 flex h-24 items-end gap-1">
+            {BREAKDOWN_ORDER.map((k) => {
+              const v = footprint.breakdown[k].value;
+              const max = Math.max(...BREAKDOWN_ORDER.map((x) => footprint.breakdown[x].value));
+              const h = max > 0 ? (v / max) * 72 : 0;
+              return (
+                <div key={k} className="flex flex-1 flex-col items-center gap-1">
+                  <div className="w-full bg-accent" style={{ height: `${h}px` }} />
+                  <span className="label-caps text-[8px] text-ink-muted">{k.slice(0, 4)}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-2 flex gap-3 font-mono text-[10px] text-ink-muted">
+            {BREAKDOWN_ORDER.map((k) => (
+              <span key={k} className="flex items-center gap-1"><span className="h-2 w-2 bg-accent" />{BREAKDOWN_LABELS[k]} {formatNumber(footprint.breakdown[k].value, 0)}</span>
+            ))}
+          </div>
+        </div>
+        <div className="col-span-12 flex flex-col items-center border border-line bg-surface p-4 md:col-span-4">
+          <div className="label-caps text-[10px] text-ink-muted">QR Verification</div>
+          <div className="mt-3 flex h-28 w-28 items-center justify-center border border-line bg-bg-elevated p-2 text-center font-mono text-[7px] leading-tight break-all">{docNo} — verify at sageport.netlify.app/verify/{docNo}</div>
+          <span className="mt-2 font-mono text-[10px]">{docNo}</span>
+          <span className="label-caps text-[9px] text-ink-muted">scan to verify</span>
         </div>
       </section>
 

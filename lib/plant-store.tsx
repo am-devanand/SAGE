@@ -7,7 +7,7 @@
  */
 
 import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { computeFootprint, gradeFromFootprint } from "@/lib/calc-engine";
+import { computeFootprint, computeGrade, gradeFromFootprint } from "@/lib/calc-engine";
 import { computePercentile, gradeThresholds } from "@/lib/optimizer";
 import { DEMO_PLANTS } from "@/lib/seed-data";
 import type { FootprintResult, GradeResult, PlantInput } from "@/lib/types";
@@ -23,14 +23,19 @@ interface PlantStore {
   footprint: FootprintResult;
   grade: GradeResult;
   percentile: { percentile: number; peerSet: "sector" | "full"; peerCount: number };
+  history: HistoryEntry[];
 }
 
 const PlantContext = createContext<PlantStore | null>(null);
 
 const REGISTERED_KEY = "sage-registered-plants";
 const SELECTED_KEY = "sage-selected-plant";
+const HISTORY_KEY = "sage-history";
 const SERVER_URL = "/api/plants";
 const MAX_LOCAL = 200;
+const HISTORY_MAX = 6;
+
+export type HistoryEntry = { date: string; total: number; perUnit: number; grade: string };
 
 function dedupeByName(list: PlantInput[]): PlantInput[] {
   const seen = new Set<string>();
@@ -83,9 +88,31 @@ function saveSelected(name: string): void {
   }
 }
 
+function loadHistory(): Record<string, HistoryEntry[]> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(HISTORY_KEY);
+    if (!raw) return {};
+    const p = JSON.parse(raw);
+    return p && typeof p === "object" ? (p as Record<string, HistoryEntry[]>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveHistory(map: Record<string, HistoryEntry[]>): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(HISTORY_KEY, JSON.stringify(map));
+  } catch {
+    /* non-fatal */
+  }
+}
+
 export function PlantProvider({ children }: { children: React.ReactNode }) {
   const [inputRaw, setInputRaw] = useState<PlantInput>(DEMO_PLANTS[0]);
   const [registered, setRegistered] = useState<PlantInput[]>(loadRegistered);
+  const [historyMap, setHistoryMap] = useState<Record<string, HistoryEntry[]>>(() => loadHistory());
   const hasRestoredRef = useRef(false);
 
   const plants = useMemo<PlantInput[]>(() => [...DEMO_PLANTS, ...registered], [registered]);
@@ -166,6 +193,24 @@ export function PlantProvider({ children }: { children: React.ReactNode }) {
     }
   }, [registered]);
 
+  const history = useMemo(() => historyMap[inputRaw.name] || [], [historyMap, inputRaw.name]);
+
+  useEffect(() => {
+    const fp = computeFootprint(inputRaw);
+    const letter = computeGrade(fp.per_unit_tCO2e, gradeThresholds());
+    const date = new Date().toISOString().slice(0, 10);
+    setHistoryMap((prev) => {
+      const cur = prev[inputRaw.name] || [];
+      const last = cur[cur.length - 1];
+      if (last && last.date === date && last.total === Math.round(fp.total_tCO2e)) return prev;
+      const next: HistoryEntry = { date, total: Math.round(fp.total_tCO2e), perUnit: Number(fp.per_unit_tCO2e.toFixed(4)), grade: letter };
+      const updated = [...cur, next].slice(-HISTORY_MAX);
+      const map = { ...prev, [inputRaw.name]: updated };
+      saveHistory(map);
+      return map;
+    });
+  }, [inputRaw]);
+
   const input = inputRaw;
 
   const value = useMemo<PlantStore>(() => {
@@ -181,8 +226,9 @@ export function PlantProvider({ children }: { children: React.ReactNode }) {
       footprint,
       grade,
       percentile,
+      history,
     };
-  }, [input, plants]);
+  }, [input, plants, history]);
 
   return <PlantContext.Provider value={value}>{children}</PlantContext.Provider>;
 }

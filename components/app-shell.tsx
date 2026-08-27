@@ -21,6 +21,10 @@ const NAV = [
   { href: "/optimize", label: "Optimizer", icon: "target" },
   { href: "/simulate", label: "Simulator", icon: "sliders" },
   { href: "/plan", label: "Plan", icon: "doc" },
+  { href: "/advisor", label: "Advisor", icon: "chat" },
+  { href: "/compare", label: "Compare", icon: "grid" },
+  { href: "/credits", label: "Credits", icon: "doc" },
+  { href: "/timeline", label: "Timeline", icon: "sliders" },
   { href: "/register", label: "Register", icon: "plus" },
 ];
 
@@ -60,6 +64,12 @@ const ICONS: Record<string, React.ReactNode> = {
   plus: (
     <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden>
       <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    </svg>
+  ),
+  chat: (
+    <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden>
+      <path d="M2 3.5h12v7H6l-3 2.5v-9.5Z" stroke="currentColor" strokeWidth="1.2" strokeLinejoin="round" />
+      <path d="M5 7h6M5 9h4" stroke="currentColor" strokeWidth="1.2" />
     </svg>
   ),
 };
@@ -154,6 +164,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="label-caps hidden text-[10px] text-ink-muted sm:inline">
               Grid · 0.7117 tCO₂/MWh
             </span>
+            {isAuthPage ? null : (
+              <a href="/notifications" aria-label="Notifications" className="hidden h-8 w-8 items-center justify-center border border-line bg-surface text-ink hover:border-accent sm:inline-flex">
+                <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden><path d="M8 3a4 4 0 0 0-4 4v2l-1 1h10l-1-1V7a4 4 0 0 0-4-4Z" stroke="currentColor" strokeWidth="1.2" /><path d="M6.5 13a1.5 1.5 0 0 0 3 0" stroke="currentColor" strokeWidth="1.2" /></svg>
+              </a>
+            )}
             {isAuthPage ? null : user ? (
               <>
                 <span className="hidden font-mono text-xs text-ink-muted sm:inline">{user.email}</span>

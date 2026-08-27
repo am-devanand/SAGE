@@ -61,7 +61,7 @@ function useBarWidth() {
 }
 
 export default function ScorecardPage() {
-  const { input, footprint, grade, percentile } = usePlant();
+  const { input, footprint, grade, percentile, history } = usePlant();
   const { ref: barRef, width: barWidth } = useBarWidth();
 
   const gradeLetter = computeGrade(footprint.per_unit_tCO2e, grade.thresholds);
@@ -280,8 +280,36 @@ export default function ScorecardPage() {
           </div>
 
           {/* -------------------------------------------------------- *
-           * CARD 3 — BREAKDOWN TABLE (full width)                    *
-           * -------------------------------------------------------- */}
+            * CARD 3 — TREND (6 records)                               *
+            * -------------------------------------------------------- */}
+          <div className="border border-line bg-surface p-5">
+            <div className="label-caps text-[10px] text-ink-muted">Trend — Last 6 Records</div>
+            {history.length < 2 ? (
+              <div className="mt-4 border border-dashed border-line p-4 text-center font-mono text-xs text-ink-muted">Not enough history yet — change plant inputs to build a trend.</div>
+            ) : (
+              <div className="mt-4">
+                <svg viewBox="0 0 300 80" className="h-20 w-full" preserveAspectRatio="none" aria-hidden>
+                  <polyline fill="none" stroke="var(--line)" strokeWidth="1" points={history.map((h, i) => `${(i / (history.length - 1)) * 300},${80 - (h.total / Math.max(...history.map((x) => x.total)) ) * 60 - 10}`).join(" ")} />
+                  {history.map((h, i) => (
+                    <circle key={h.date + i} cx={(i / (history.length - 1)) * 300} cy={80 - (h.total / Math.max(...history.map((x) => x.total)) ) * 60 - 10} r="2" fill="var(--accent)" />
+                  ))}
+                </svg>
+                <div className="mt-2 grid grid-cols-6 gap-2">
+                  {history.map((h) => (
+                    <div key={h.date} className="border-l border-line pl-2">
+                      <div className="label-caps text-[9px] text-ink-muted">{h.date.slice(5)}</div>
+                      <div className="font-mono text-xs">{h.total} t</div>
+                      <div className="font-mono text-[10px] text-accent">{h.grade}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* -------------------------------------------------------- *
+            * CARD 4 — BREAKDOWN TABLE (full width)                    *
+            * -------------------------------------------------------- */}
           <div className="border border-line bg-surface p-5">
             <div className="label-caps text-[10px] text-ink-muted">Breakdown Table</div>
 

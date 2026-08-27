@@ -6,6 +6,7 @@ import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
 import { AuthProvider } from "@/lib/auth-store";
 import { PlantProvider } from "@/lib/plant-store";
 import { AppShell } from "@/components/app-shell";
+import { PwaRegister } from "@/components/pwa-register";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -55,6 +56,7 @@ export default function RootLayout({
           <AuthProvider>
             <PlantProvider>
               <AppShell>{children}</AppShell>
+              <PwaRegister />
             </PlantProvider>
           </AuthProvider>
         </ThemeProvider>
