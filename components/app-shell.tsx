@@ -10,6 +10,8 @@ import { usePathname } from "next/navigation";
 import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePlant } from "@/lib/plant-store";
+import { useAuth } from "@/lib/auth-store";
+import { useRouter } from "next/navigation";
 
 const NAV = [
   { href: "/", label: "Dashboard", icon: "grid" },
@@ -62,13 +64,16 @@ const ICONS: Record<string, React.ReactNode> = {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const { input, plants, setPlant } = usePlant();
   const currentIndex = Math.max(0, plants.findIndex((p) => p.name === input.name));
+  const isAuthPage = pathname === "/login" || pathname === "/signup";
 
   return (
     <div className="flex min-h-screen bg-bg text-ink">
-      {/* Sidebar */}
-      <aside className="hidden w-56 shrink-0 flex-col border-r border-line bg-bg-elevated md:flex">
+      {/* Sidebar — hidden on auth pages */}
+      {isAuthPage ? null : <aside className="hidden w-56 shrink-0 flex-col border-r border-line bg-bg-elevated md:flex">
         <div className="border-b border-line px-5 py-4">
           <Link href="/" className="block">
             <div className="label-caps text-lg leading-none text-ink">{APP_NAME}</div>
@@ -112,7 +117,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             ))}
           </select>
         </div>
-      </aside>
+      </aside>}
 
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
@@ -129,6 +134,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="label-caps hidden text-[10px] text-ink-muted sm:inline">
               Grid · 0.7117 tCO₂/MWh
             </span>
+            {isAuthPage ? null : user ? (
+              <>
+                <span className="hidden font-mono text-xs text-ink-muted sm:inline">{user.email}</span>
+                <Link href="/select-plant" className="label-caps text-[10px] text-accent hover:underline">Switch plant</Link>
+                <button type="button" onClick={() => { logout(); router.push("/login"); }} className="btn-press border border-line bg-surface px-2 py-1 text-ink hover:border-accent"><span className="label-caps text-[10px]">Logout</span></button>
+              </>
+            ) : (
+              <Link href="/login" className="btn-press border border-accent bg-accent px-2 py-1 text-accent-ink"><span className="label-caps text-[10px]">Login</span></Link>
+            )}
             <ThemeToggle />
           </div>
         </header>

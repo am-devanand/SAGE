@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
+import { AuthProvider } from "@/lib/auth-store";
 import { PlantProvider } from "@/lib/plant-store";
 import { AppShell } from "@/components/app-shell";
 
@@ -35,9 +36,11 @@ export default function RootLayout({
         className={`${plexSans.variable} ${plexMono.variable} antialiased`}
       >
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-          <PlantProvider>
-            <AppShell>{children}</AppShell>
-          </PlantProvider>
+          <AuthProvider>
+            <PlantProvider>
+              <AppShell>{children}</AppShell>
+            </PlantProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
