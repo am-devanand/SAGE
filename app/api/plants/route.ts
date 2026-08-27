@@ -9,7 +9,10 @@ import type { PlantInput } from "@/lib/types";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const IS_NETLIFY = process.env.NETLIFY === "true";
+const DATA_DIR = IS_NETLIFY
+  ? path.join("/tmp", "sage-data")
+  : path.join(process.cwd(), "data");
 const DATA_FILE = path.join(DATA_DIR, "registered-plants.json");
 const MAX_RECORDS = 1000;
 
@@ -58,8 +61,14 @@ async function readRecords(): Promise<StoredRecord[]> {
 }
 
 async function writeRecords(records: StoredRecord[]): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(DATA_FILE, JSON.stringify(records, null, 2), "utf8");
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.writeFile(DATA_FILE, JSON.stringify(records, null, 2), "utf8");
+  } catch {
+    // On Netlify Functions the filesystem is ephemeral/read-only except /tmp.
+    // A write failure should not break the API — the plant is still returned
+    // and remains in localStorage on the client.
+  }
 }
 
 export async function GET() {

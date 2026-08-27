@@ -1,0 +1,12 @@
+[build]
+  command = "npx next build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Next.js Runtime is auto-installed by Netlify for Next 15.
+# Adding it explicitly ensures SSR / API routes (/api/plants) work
+# and fixes the "Page not found" when publish dir was set to `out`.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
