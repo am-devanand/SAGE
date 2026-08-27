@@ -24,7 +24,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="mx-auto grid min-h-[calc(100vh-56px)] max-w-[1280px] grid-cols-12 gap-8 px-8 py-12">
+    <div className="mx-auto grid min-h-[calc(100vh-56px)] max-w-[1280px] grid-cols-12 gap-8 px-4 py-6 md:px-8 md:py-12">
       <div className="col-span-12 flex flex-col justify-center border border-line bg-bg-elevated p-8 md:col-span-5">
         <span className="label-caps text-[10px] text-ink-muted">SAGE — new workspace</span>
         <h1 className="mt-3 font-display text-3xl font-bold uppercase leading-[0.95] tracking-tight">

@@ -72,7 +72,7 @@ export default function ScorecardPage() {
   const markerLeft = Math.min(98, Math.max(2, percentile.percentile));
 
   return (
-    <div className="relative mx-auto flex max-w-[1280px] flex-col gap-8 px-8 py-8">
+    <div className="relative mx-auto flex max-w-[1280px] flex-col gap-8 px-4 py-6 md:px-8 md:py-8">
       {/* ============================================================ *
        * HEADER ROW                                                    *
        * ============================================================ */}

@@ -128,7 +128,7 @@ export default function RegisterPage() {
     form[key] as unknown as string;
 
   return (
-    <div className="blueprint-grid relative mx-auto flex max-w-[1280px] flex-col gap-8 px-8 py-8">
+    <div className="blueprint-grid relative mx-auto flex max-w-[1280px] flex-col gap-8 px-4 py-6 md:px-8 md:py-8">
       <header>
         <h1 className="font-display text-2xl font-bold uppercase tracking-tight">Register Company</h1>
         <p className="label-caps mt-1 text-[10px] text-ink-muted">

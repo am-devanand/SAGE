@@ -86,7 +86,7 @@ export default function Home() {
   const biggest = footprint.breakdown[footprint.biggestContributor];
 
   return (
-    <div className="relative mx-auto max-w-[1280px] px-8 py-8">
+    <div className="relative mx-auto max-w-[1280px] px-4 py-6 md:px-8 md:py-8">
       {/* ============================================================ *
        * SECTION 1 — HERO (asymmetric 55/45, blueprint sheet)          *
        * ============================================================ */}

@@ -19,7 +19,7 @@ export default function SelectPlantPage() {
   if (!user) return null;
 
   return (
-    <div className="mx-auto max-w-[1280px] px-8 py-8">
+    <div className="mx-auto max-w-[1280px] px-4 py-6 md:px-8 md:py-8">
       <header className="border border-line bg-bg-elevated p-6">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
