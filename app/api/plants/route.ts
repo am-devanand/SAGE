@@ -71,6 +71,19 @@ async function writeRecords(records: StoredRecord[]): Promise<void> {
   }
 }
 
+let writeQueue: Promise<void> = Promise.resolve();
+async function withWriteLock<T>(fn: () => Promise<T>): Promise<T> {
+  const prev = writeQueue;
+  let release!: () => void;
+  writeQueue = new Promise<void>((res) => (release = res));
+  await prev;
+  try {
+    return await fn();
+  } finally {
+    release();
+  }
+}
+
 export async function GET() {
   const records = await readRecords();
   return NextResponse.json({ plants: records.map((r) => r.plant) });
@@ -87,14 +100,16 @@ export async function POST(req: Request) {
   if (!isValidPlant(plant)) {
     return NextResponse.json({ error: "Invalid plant payload" }, { status: 400 });
   }
-  const records = await readRecords();
   const record: StoredRecord = {
     id: `reg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
     plant,
     createdAt: new Date().toISOString(),
   };
-  records.push(record);
-  if (records.length > MAX_RECORDS) records.splice(0, records.length - MAX_RECORDS);
-  await writeRecords(records);
-  return NextResponse.json({ id: record.id, plant: record.plant }, { status: 201 });
+  return withWriteLock(async () => {
+    const records = await readRecords();
+    records.push(record);
+    if (records.length > MAX_RECORDS) records.splice(0, records.length - MAX_RECORDS);
+    await writeRecords(records);
+    return NextResponse.json({ id: record.id, plant: record.plant }, { status: 201 });
+  });
 }
