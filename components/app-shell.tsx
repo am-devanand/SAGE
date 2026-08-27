@@ -5,6 +5,7 @@
  * Matches the reference structure: Dashboard/Scorecard/Optimizer/Simulator/Plan.
  */
 
+import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAME, APP_TAGLINE } from "@/lib/brand";
@@ -69,6 +70,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const { input, plants, setPlant } = usePlant();
   const currentIndex = Math.max(0, plants.findIndex((p) => p.name === input.name));
   const isAuthPage = pathname === "/login" || pathname === "/signup";
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  React.useEffect(() => { setDrawerOpen(false); }, [pathname]);
 
   return (
     <div className="flex min-h-screen bg-bg text-ink">
@@ -122,8 +125,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Main column */}
       <div className="flex min-w-0 flex-1 flex-col">
         {/* Top bar */}
-        <header className="flex h-14 shrink-0 items-center justify-between border-b border-line bg-surface px-4 md:px-6">
+        <header className="flex h-14 shrink-0 items-center justify-between border-b border-line bg-surface px-4 md:px-6" style={{ paddingTop: "env(safe-area-inset-top)" } as React.CSSProperties}>
           <div className="flex items-center gap-3">
+            {isAuthPage ? null : (
+              <button type="button" onClick={() => setDrawerOpen((v) => !v)} aria-label={drawerOpen ? "Close navigation" : "Open navigation"} aria-expanded={drawerOpen} className="inline-flex h-11 w-11 items-center justify-center border border-line bg-surface text-ink md:hidden">
+                {drawerOpen ? (
+                  <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.2" /></svg>
+                ) : (
+                  <svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden><path d="M2 4h12M2 8h12M2 12h12" stroke="currentColor" strokeWidth="1.2" /></svg>
+                )}
+              </button>
+            )}
             {/* Mobile brand */}
             <span className="label-caps text-base md:hidden">{APP_NAME}</span>
             <span className="label-caps hidden text-xs text-ink-muted md:inline">
@@ -147,8 +159,38 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
 
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-[env(safe-area-inset-bottom)]">{children}</main>
       </div>
+
+      {/* Mobile drawer */}
+      {isAuthPage || !drawerOpen ? null : (
+        <div className="fixed inset-0 z-40 md:hidden" role="dialog" aria-modal="true">
+          <button aria-label="Close navigation" onClick={() => setDrawerOpen(false)} className="absolute inset-0 bg-ink/30" />
+          <div className="absolute left-0 top-0 flex h-full w-72 max-w-[85vw] flex-col border-r border-line bg-bg-elevated">
+            <div className="flex h-14 items-center justify-between border-b border-line px-5">
+              <span className="label-caps text-sm">{APP_NAME}</span>
+              <button type="button" onClick={() => setDrawerOpen(false)} aria-label="Close" className="inline-flex h-11 w-11 items-center justify-center border border-line bg-surface"><svg viewBox="0 0 16 16" className="h-4 w-4" fill="none" aria-hidden><path d="M3 3l10 10M13 3L3 13" stroke="currentColor" strokeWidth="1.2" /></svg></button>
+            </div>
+            <nav className="flex-1 overflow-y-auto py-4">
+              <ul className="space-y-0.5 px-2">
+                {NAV.map((item) => {
+                  const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+                  return (
+                    <li key={item.href}>
+                      <Link href={item.href} onClick={() => setDrawerOpen(false)} className={`flex min-h-11 items-center gap-3 border px-3 py-2 text-sm ${active ? "border-accent bg-surface text-ink" : "border-transparent text-ink-muted"}`}>{ICONS[item.icon]}<span className="label-caps text-xs tracking-wide">{item.label}</span></Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
+            <div className="border-t border-line p-4">
+              <div className="label-caps text-[10px] text-ink-muted">Demo plant</div>
+              <select value={currentIndex} onChange={(e) => { setPlant(Number(e.target.value)); setDrawerOpen(false); }} className="mt-2 min-h-11 w-full border border-line bg-surface px-2 py-2 font-mono text-sm text-ink" aria-label="Select demo plant (mobile)">{plants.map((p, i) => (<option key={p.name} value={i}>{p.name}</option>))}</select>
+              {user ? <button type="button" onClick={() => { logout(); setDrawerOpen(false); router.push("/login"); }} className="mt-3 w-full border border-line bg-surface px-3 py-2 text-left"><span className="label-caps text-xs">Logout — {user.email}</span></button> : null}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

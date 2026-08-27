@@ -56,6 +56,9 @@
 
 html {
   color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  scrollbar-gutter: stable;
 }
 html.dark {
   color-scheme: dark;
@@ -67,6 +70,34 @@ body {
   font-family: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
   /* Sharp corners everywhere — the blueprint narrative forbids rounding. */
   border-radius: 0;
+  overflow-x: hidden;
+  touch-action: manipulation;
+}
+
+/* Safe-area for notched phones (iPhone X+). Header already uses env(safe-area-inset-top). */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Phone: ensure interactive targets are thumb-friendly (44px min). Blueprint keeps 1px borders, not padding bloat. */
+@media (pointer: coarse) {
+  button, a, input, select {
+    min-height: 44px;
+  }
+  input[type="range"] {
+    height: 24px;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    width: 22px;
+    height: 22px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 /* All numbers/metrics render in the mono data font — enforced by the
